@@ -10,3 +10,6 @@ testing/
 testing*
 *.pyc
 bin/
+.nf-core.yml
+.github/ISSUE_TEMPLATE/bug_report.yml
+.github/workflows/linting.yml

@@ -12,7 +12,7 @@ on:
 
 jobs:
   pre-commit:
-    runs-on: dev-azure-edso-runner
+    runs-on: ubuntu-latest
     steps:
       - uses: actions/checkout@0ad4b8fadaa221de15dcec353f45205ec38ea70b # v4
 
@@ -28,28 +28,16 @@ jobs:
         run: pre-commit run --all-files
 
   nf-core:
-    runs-on: dev-azure-edso-runner
+    runs-on: ubuntu-latest
     steps:
-      - name: Generate GitHub app access token
-        uses: actions/create-github-app-token@v1
-        id: app-token
-        with:
-          app-id: ${{ vars.GH_APP_ID }}
-          private-key: ${{ secrets.GH_APP_PRIVATE_KEY }}
-          owner: cdcent
 
       - name: Check out pipeline code
         uses: actions/checkout@0ad4b8fadaa221de15dcec353f45205ec38ea70b # v4
 
-      - name: Check out ph-core pipeline code
-        uses: actions/checkout@0ad4b8fadaa221de15dcec353f45205ec38ea70b
-        with:
-          repository: cdcent/oamd-bio-ph-core
-          token: ${{ steps.app-token.outputs.token }}
-          path: "nfcore/cdcent/oamd-bio-ph-core"
-
       - name: Install Nextflow
         uses: nf-core/setup-nextflow@v2
+        with:
+          version: "${{ matrix.NXF_VER }}"
 
       - uses: actions/setup-python@82c7e631bb3cdc910f68e0081d67478d79c6982d # v5
         with:
@@ -62,12 +50,7 @@ jobs:
           pip install nf-core==2.14.1
 
       - name: Run nf-core lint
-        env:
-          GITHUB_COMMENTS_URL: ${{ github.event.pull_request.comments_url }}
-          GITHUB_TOKEN: ${{ steps.app-token.outputs.token }}
-          GITHUB_PR_COMMIT: ${{ github.event.pull_request.head.sha }}
-          XDG_CONFIG_HOME: ${{ github.workspace }}
-        run: nf-core -l lint_log.txt lint --dir ${GITHUB_WORKSPACE} --markdown lint_results.md
+        run: nf-core -l lint_log.txt lint --markdown lint_results.md
 
       - name: Save PR number
         if: ${{ always() }}
