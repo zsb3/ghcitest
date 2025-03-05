@@ -19,6 +19,7 @@ lint:
   - .github/ISSUE_TEMPLATE/bug_report.yml
   - .github/workflows/branch.yml
   - .github/workflows/linting.yml
+  - .gitignore
 
   multiqc_config:
   - report_comment
