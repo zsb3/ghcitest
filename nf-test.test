@@ -1,0 +1,21 @@
+nextflow_pipeline {
+
+    name "Test Pipeline with 1 process"
+    script "pipeline.nf"
+
+    test("Should run without failures") {
+
+        when {
+            params {
+              input_text = "hello,nf-test"
+            }
+        }
+
+        then {
+            assert workflow.success
+            assert workflow.trace.tasks().size() == 2
+        }
+
+    }
+
+}

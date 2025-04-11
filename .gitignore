@@ -7,3 +7,4 @@ output/
 testing/
 testing*
 *.pyc
+*.log
