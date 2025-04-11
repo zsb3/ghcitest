@@ -18,8 +18,6 @@ concurrency:
 jobs:
   test:
     name: Run pipeline with test data
-    # Only run on push if this is the nf-core dev branch (merged PRs)
-    if: "${{ github.event_name != 'push' || (github.event_name == 'push' && github.repository == 'cdcent/oamd-bio-tb-main-surveillance-nf-core') }}"
     runs-on: ubuntu-latest
     strategy:
       matrix:
@@ -37,4 +35,4 @@ jobs:
 
       - name: Run pipeline with test data
         run: |
-          nextflow run ../../main.nf -profile test,docker --outdir ./results
+          nextflow run main.nf -profile test,docker --outdir ./results
