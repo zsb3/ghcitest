@@ -32,6 +32,14 @@ jobs:
         uses: nf-core/setup-nextflow@v2
         with:
           version: "${{ matrix.NXF_VER }}"
+      
+      - name: Install nf-test
+        run: |
+          wget -qO- https://get.nf-test.com | bash
+          sudo mv nf-test /usr/local/bin/
+
+      - name: Run Tests
+        run: nf-test test main.nf.test 
 
       - name: Run pipeline with test data
         run: |
